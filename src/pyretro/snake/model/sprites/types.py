@@ -3,8 +3,8 @@ import logging
 from copy import copy
 from typing import TypeVar
 
-from snake.model.sprites.rect import SnakeRect
-from snake.model.structs import Point, Size
+from pyretro.snake.model.sprites.rect import SnakeRect
+from pyretro.snake.model.structs import Point, Size
 
 Self = TypeVar("Self", bound="SnakeRect")
 

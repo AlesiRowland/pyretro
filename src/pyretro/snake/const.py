@@ -1,4 +1,4 @@
-from snake.model.structs import RectColors, Size
+from pyretro.snake.model.structs import RectColors, Size
 
 UNIT_SIZE = Size(20, 20)
 

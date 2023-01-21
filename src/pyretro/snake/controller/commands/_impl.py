@@ -6,7 +6,7 @@ from pygame.event import Event
 from .base import ControllerCmd
 from .events import INTERNAL_EVENT, InternalEvent, KeyEvent
 from .registry import game_command_registry
-from snake.model.enums import Direction
+from pyretro.snake.model.enums import Direction
 
 
 class SetDirection(ControllerCmd):

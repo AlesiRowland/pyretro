@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from snake.model.structs import Size
+from pyretro.snake.model.structs import Size
 
 
 @dataclass

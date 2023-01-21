@@ -2,7 +2,7 @@ from typing import Type, TypeVar
 
 import pygame as pygame
 
-from snake.model.structs import Point, Size
+from pyretro.snake.model.structs import Point, Size
 
 Self = TypeVar("Self", bound="SnakeRect")
 

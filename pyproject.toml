@@ -19,6 +19,9 @@ pytest-cov = "^4.0.0"
 requires = ["poetry-core"]
 build-backend = "poetry.core.masonry.api"
 
+[tool.poetry.scripts]
+pysnake = 'pyretro.snake.__main__:snake'
+
 [tool.pytest.ini_options]
 pythonpath=["src", "tests"]
 

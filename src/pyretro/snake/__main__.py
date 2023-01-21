@@ -6,12 +6,12 @@ import logging
 
 import pygame.display
 
-from snake import change_log_level
-from snake.const import GRID_N, UNIT_SIZE
-from snake.controller import SnakeGameController
-from snake.model import SnakeGameModel
-from snake.model.settings import SnakeSettings
-from snake.view import SnakeGameView
+from pyretro.snake import change_log_level
+from pyretro.snake.const import GRID_N, UNIT_SIZE
+from pyretro.snake.controller import SnakeGameController
+from pyretro.snake.model import SnakeGameModel
+from pyretro.snake.model.settings import SnakeSettings
+from pyretro.snake.view import SnakeGameView
 
 
 def snake():

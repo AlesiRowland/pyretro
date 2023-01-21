@@ -2,8 +2,8 @@ from typing import Iterable, TypeVar
 
 import pygame
 
-from snake.const import BACKGROUND_COLOR, SNAKE_COLORS
-from snake.model.sprites.types import Sprite
+from pyretro.snake.const import BACKGROUND_COLOR, SNAKE_COLORS
+from pyretro.snake.model.sprites.types import Sprite
 
 T = TypeVar("T", bound="SnakeGameView")
 

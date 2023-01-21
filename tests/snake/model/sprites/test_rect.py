@@ -1,7 +1,7 @@
 import pytest
 from pytest_cases import fixture
 
-from snake.model import Size, SnakeRect
+from pyretro.snake.model import Size, SnakeRect
 
 
 @pytest.mark.unit

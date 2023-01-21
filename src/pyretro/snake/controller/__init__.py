@@ -4,8 +4,8 @@ from collections.abc import Iterable
 import pygame
 from pygame.event import Event  # type: ignore
 
-from snake.model import SnakeGameModel
-from snake.view import SnakeGameView
+from pyretro.snake.model import SnakeGameModel
+from pyretro.snake.view import SnakeGameView
 from .commands import game_command_registry
 from .commands.events import INTERNAL_EVENT, wrap_event
 

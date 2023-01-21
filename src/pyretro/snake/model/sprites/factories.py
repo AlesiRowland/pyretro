@@ -1,9 +1,9 @@
 import random
 
-from snake.model.sprites.rect import SnakeRect
-from snake.model.settings import SnakeSettings
-from snake.model.sprites.types import Snake, SnakeFood
-from snake.model.structs import Point
+from pyretro.snake.model.sprites.rect import SnakeRect
+from pyretro.snake.model.settings import SnakeSettings
+from pyretro.snake.model.sprites.types import Snake, SnakeFood
+from pyretro.snake.model.structs import Point
 
 
 class SnakeCoordinateFactory:
