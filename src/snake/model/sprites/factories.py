@@ -49,6 +49,7 @@ class SnakeCoordinateFactory:
         y = (snake_rect.y + snake_rect.height) % self.screen_size.height
         return Point(snake_rect.x, y)
 
+
 class SpriteFactory:
     def __init__(self, coordinate_factory: SnakeCoordinateFactory) -> None:
         self._coordinate_factory = coordinate_factory
