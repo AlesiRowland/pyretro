@@ -1,0 +1,33 @@
+[tool.poetry]
+name = "pyretro"
+version = "0.1.0"
+description = ""
+authors = ["AlesiRowland <alesi.rowland@essentia-analytics.com>"]
+readme = "README.md"
+
+[tool.poetry.dependencies]
+python = "^3.9.1"
+pygame = "^2.1.2"
+
+
+[tool.poetry.group.dev.dependencies]
+mypy = "^0.991"
+pytest = "^7.2.1"
+pytest-cases = "^3.6.13"
+pytest-cov = "^4.0.0"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.pytest.ini_options]
+pythonpath=["src", "tests"]
+
+markers = [
+  "integration: mark as end-to-end integration test.",
+  "smoke: mark as key tests that should cover key or fragile features.",
+  "unit: mark a test as a unit test.",
+]
+
+[tool.mypy]
+mypy_path = "$MYPY_CONFIG_FILE_DIR/src"
