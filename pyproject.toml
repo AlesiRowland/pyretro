@@ -1,7 +1,7 @@
 [tool.poetry]
 name = "pyretro"
 version = "0.1.0"
-description = ""
+description = "A library of retro games written in python."
 authors = ["AlesiRowland <alesi.rowland@essentia-analytics.com>"]
 readme = "README.md"
 
