@@ -18,7 +18,7 @@ class SnakeGameModel:
         self._sprite_factory = SpriteFactory(self._coordinate_factory)
 
         self._snake = self._sprite_factory.create_snake()
-        self._snake_food = []
+        self._snake_food: list[SnakeFood] = []
 
     @property
     def snake(self) -> Snake:

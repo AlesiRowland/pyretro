@@ -10,7 +10,7 @@ from snake.model.enums import Direction
 
 
 class SetDirection(ControllerCmd):
-    direction = NotImplemented
+    direction: Direction = NotImplemented
 
     def execute(self):
         self._controller.alter_direction(self.direction)

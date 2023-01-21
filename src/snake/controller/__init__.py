@@ -2,7 +2,7 @@ import logging
 from collections.abc import Iterable
 
 import pygame
-from pygame.event import Event
+from pygame.event import Event  # type: ignore
 
 from snake.model import SnakeGameModel
 from snake.view import SnakeGameView

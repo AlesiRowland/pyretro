@@ -5,7 +5,7 @@ from typing import Type
 from .base import ControllerCmd
 from .events import WrappedEvent
 
-CmdRegistrationDecorator = Callable[[Type[ControllerCmd], None]]
+CmdRegistrationDecorator = Callable[[Type[ControllerCmd]], None]
 
 
 class ControllerCmdRegistry:
@@ -21,7 +21,7 @@ class ControllerCmdRegistry:
     def has_subscribed_commands(self, event: WrappedEvent) -> bool:
         return event in self._bindings
 
-    def create_subscribed(self, event: WrappedEvent, controller: "SnakeController") -> list[ControllerCmd]:
+    def create_subscribed(self, event: WrappedEvent, controller: "SnakeGameController") -> list[ControllerCmd]:
         return [cls(controller) for cls in self._bindings[event]]
 
 

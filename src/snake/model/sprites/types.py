@@ -12,7 +12,7 @@ LOGGER = logging.getLogger(__name__)
 
 
 class Sprite(abc.ABC):
-    color = NotImplemented
+    color: str = NotImplemented
 
     @property
     @abc.abstractmethod
