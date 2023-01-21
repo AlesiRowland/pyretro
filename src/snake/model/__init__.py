@@ -34,7 +34,7 @@ class SnakeGameModel:
 
     @property
     def sprites(self) -> list[Sprite]:
-        return [self._snake] + self._snake_food
+        return self._snake_food + [self._snake]  # Always render snake last.
 
     def pop_found_snake_food(self) -> list[SnakeFood]:
         remaining_snake_food = []
@@ -49,7 +49,10 @@ class SnakeGameModel:
 
     def add_snake_food(self: T) -> T:
         top_left_point = self._coordinate_factory.new_snake_food_location()
+        while self._snake.contains_top_left(top_left_point):
+            top_left_point = self._coordinate_factory.new_snake_food_location()
         snake_food = self._sprite_factory.create_snake_food(top_left_point)
+
         self._snake_food.append(snake_food)
         return self
 

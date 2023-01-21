@@ -1,7 +1,7 @@
 import abc
 
 
-class ControllerCommand(abc.ABC):
+class ControllerCmd(abc.ABC):
     def __init__(self, controller: "SnakeGameController") -> None:  # noqa
         self._controller = controller
 

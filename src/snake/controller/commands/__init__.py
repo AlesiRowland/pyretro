@@ -1,1 +1,1 @@
-from ._impl import command_registry
+from ._impl import game_command_registry

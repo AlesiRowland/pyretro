@@ -17,7 +17,7 @@ class SnakeGameView:
 
     def render_sprite(self: T, sprite: Sprite) -> T:
         for elem in sprite.rects:
-            pygame.draw.rect(self._surface, SNAKE_COLORS.fill, elem)
+            pygame.draw.rect(self._surface, sprite.color, elem)
             pygame.draw.rect(self._surface, SNAKE_COLORS.border, elem, width=1)
         return self
 

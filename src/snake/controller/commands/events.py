@@ -1,5 +1,5 @@
 import logging
-from typing import Any, Protocol, TypeVar
+from typing import Any, Protocol, TypeVar, Union
 
 import pygame
 
@@ -7,6 +7,15 @@ LOGGER = logging.getLogger(__name__)
 
 INTERNAL_EVENT = pygame.event.custom_type()
 T = TypeVar("T", bound="WrappedEvent")
+
+
+class WrappedEvent(Protocol):
+    event: pygame.event.Event = NotImplemented
+    type: int = NotImplemented
+    def __hash__(self) -> int: ...
+    def __eq__(self, other: Any) -> bool: ...
+    def __repr__(self) -> str: ...
+    def __str__(self) -> str: ...
 
 
 class EventWrapper:
@@ -21,14 +30,11 @@ class EventWrapper:
             return self.__dict__ == other.__dict__
         return NotImplemented
 
+    def __repr__(self) -> str:
+        return self.__str__()
 
-class WrappedEvent(Protocol):
-    event = NotImplemented
-
-    @property
-    def type(self) -> int: ...
-    def __hash__(self) -> int: ...
-    def __eq__(self, other: Any) -> bool: ...
+    def __str__(self) -> str:
+        return f"{type(self).__name__}({self.event})"
 
 
 class KeyEvent(EventWrapper, WrappedEvent):
@@ -58,6 +64,5 @@ class InternalEvent(EventWrapper, WrappedEvent):
 def wrap_event(event):
     if hasattr(event, "key"):
         return KeyEvent(event)
-
     else:
         return InternalEvent(event)

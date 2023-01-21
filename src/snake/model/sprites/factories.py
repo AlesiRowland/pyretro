@@ -1,6 +1,5 @@
 import random
 
-from snake.model.structs import Size
 from snake.model.sprites.rect import SnakeRect
 from snake.model.settings import SnakeSettings
 from snake.model.sprites.types import Snake, SnakeFood
@@ -49,7 +48,6 @@ class SnakeCoordinateFactory:
     def get_move_down_coordinates(self, snake_rect: SnakeRect) -> Point:
         y = (snake_rect.y + snake_rect.height) % self.screen_size.height
         return Point(snake_rect.x, y)
-
 
 class SpriteFactory:
     def __init__(self, coordinate_factory: SnakeCoordinateFactory) -> None:

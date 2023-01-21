@@ -1,23 +1,29 @@
-from ._base import ControllerCommand
+from collections import defaultdict
+from collections.abc import Callable
+from typing import Type
+
+from .base import ControllerCmd
 from .events import WrappedEvent
 
+CmdRegistrationDecorator = Callable[[Type[ControllerCmd], None]]
 
-class ControllerCommandRegistry:
+
+class ControllerCmdRegistry:
     def __init__(self):
-        self.__bindings = {}
+        self._bindings = defaultdict(lambda: [])
 
-    def register(self, event: WrappedEvent):
-        def decorator(cls):
-            self.__bindings[event] = cls
+    def subscribe(self, event: WrappedEvent) -> CmdRegistrationDecorator:
+        def decorator(cls: Type[ControllerCmd]) -> None:
+            self._bindings[event].append(cls)
 
         return decorator
 
-    def is_registered(self, event: WrappedEvent):
-        return event in self.__bindings
+    def has_subscribed_commands(self, event: WrappedEvent) -> bool:
+        return event in self._bindings
 
-    def create_command(self, event: WrappedEvent, controller) -> ControllerCommand:
-        cls = self.__bindings[event]
-        return cls(controller)
+    def create_subscribed(self, event: WrappedEvent, controller: "SnakeController") -> list[ControllerCmd]:
+        return [cls(controller) for cls in self._bindings[event]]
 
 
-command_registry = ControllerCommandRegistry()
+game_command_registry = ControllerCmdRegistry()
+init_command_registry = ControllerCmdRegistry()
