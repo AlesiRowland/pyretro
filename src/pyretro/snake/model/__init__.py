@@ -13,7 +13,7 @@ T = TypeVar("T", bound="SnakeGameModel")
 class SnakeGameModel:
     def __init__(self, snake_settings: SnakeSettings) -> None:
         self.current_movement_direction = Direction.UP
-
+        self._snake_settings = snake_settings
         self._coordinate_factory = SnakeCoordinateFactory(snake_settings)
         self._sprite_factory = SpriteFactory(self._coordinate_factory)
 
@@ -74,7 +74,7 @@ class SnakeGameModel:
 
         found_snake_food = self.pop_found_snake_food()
         coordinates = self.get_movement_coordinates()
-        if found_snake_food or len(self._snake) < 10:
+        if found_snake_food or len(self._snake) < self._snake_settings.auto_grow_until:
             self._snake.grow(coordinates)
         else:
             self._snake.move(coordinates)
