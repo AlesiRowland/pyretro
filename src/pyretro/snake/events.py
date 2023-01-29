@@ -1,7 +1,11 @@
 import logging
-from typing import Any, Protocol, TypeVar, Union
+from typing import Any, Protocol, TypeVar
 
-import pygame
+import pygame.event
+
+CYCLE_EVENT = pygame.event.custom_type()  # Dictates the cycle of the game.
+COLLIDE_EVENT = pygame.event.custom_type()  # Indicates the snake collided.
+
 
 LOGGER = logging.getLogger(__name__)
 

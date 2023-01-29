@@ -60,9 +60,9 @@ class SnakeSpriteFactory:
         snake = Snake(snake_head, self._coordinate_factory.screen_size, colors)
         return snake
 
-    def create_snake_food(self, top_left_point: Point) -> SnakeFood:
-        snake_rect = self._create_snake_rect(top_left_point)
-        snake_food = SnakeFood(snake_rect)
+    def create_snake_food(self, top_left: Point, colors: BlockColors) -> SnakeFood:
+        snake_rect = self._create_snake_rect(top_left)
+        snake_food = SnakeFood(snake_rect, colors)
         return snake_food
 
     def create_menu_title(self) -> TitleSprite:

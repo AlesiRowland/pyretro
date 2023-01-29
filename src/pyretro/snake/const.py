@@ -1,8 +1,11 @@
-from pyretro.snake.structs import RectColors, Size
+from pyretro.snake.structs import BlockColors, GameSettings, Size
 
-UNIT_SIZE = Size(20, 20)
-
-GRID_N = Size(20, 20)
-SNAKE_COLORS = RectColors("purple", "black")
-
-BACKGROUND_COLOR = "green"
+DEFAULT_GAME_SETTINGS = GameSettings(
+    unit_size=Size(20, 20),
+    grid_size=Size(20, 20),
+    snake_colors=BlockColors("purple", "black"),
+    snake_food_colors = BlockColors("red", "black"),
+    game_background_color="green",
+    menu_background_color="green",
+    game_over_background_color="green",
+)

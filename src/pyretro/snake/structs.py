@@ -42,6 +42,19 @@ class Size:
 
 
 @dataclass(frozen=True)
-class RectColors:
+class BlockColors:
     fill: str = "green"
     border: str = "black"
+
+
+@dataclass
+class GameSettings:
+
+    unit_size: Size
+    grid_size: Size
+    snake_colors: BlockColors
+    snake_food_colors: BlockColors
+    game_background_color: str
+    menu_background_color: str
+    game_over_background_color: str
+    auto_grow_until: int = 10

@@ -1,17 +1,27 @@
 import abc
 import logging
 from copy import copy
-from typing import TypeVar
+from typing import Type, TypeVar
 
 import pygame
 
-from pyretro.snake.const import SNAKE_COLORS
-from pyretro.snake.model.sprites.rect import SnakeRect
 from pyretro.snake.structs import Point, Size
+from pyretro.snake.structs import BlockColors
 
 Self = TypeVar("Self", bound="SnakeRect")
 
 LOGGER = logging.getLogger(__name__)
+
+
+class SnakeRect(pygame.Rect):
+    """Represents a rect for the Snake Game."""
+
+    def to_tuple(self) -> tuple[int, int, int, int]:
+        return self.x, self.y, self.width, self.height
+
+    @classmethod
+    def from_structs(cls: Type[Self], point: Point, size: Size) -> Self:
+        return cls(point.x, point.y, size.width, size.height)
 
 
 class Sprite(abc.ABC):
@@ -28,21 +38,20 @@ class Sprite(abc.ABC):
 
 
 class TitleSprite(Sprite):
-    def __init__(self, text, top_left, size=24):
-        font = pygame.font.Font('freesansbold.ttf', size)
-        self._text = font.render(text, True, "green")
-        self._rect = self._text.get_rect(top_left=top_left.to_tuple())
+    def __init__(self, text, center, color="black", size=24):
+        font = pygame.font.SysFont("arialunicode", size, True, False)
+        self._text = font.render(text, True, color)
+        self._rect = self._text.get_rect(center=center.to_tuple())
 
-    @abc.abstractmethod
     def draw_onto(self, surface):
         surface.blit(self._text, self._rect)
 
 
 class SnakeFood(Sprite):
-    color = "red"
 
-    def __init__(self, snake_rect: SnakeRect) -> None:
+    def __init__(self, snake_rect: SnakeRect, colors: BlockColors) -> None:
         self._rect = snake_rect
+        self.colors = colors
 
     @property
     def rects(self) -> list[SnakeRect]:
@@ -52,16 +61,17 @@ class SnakeFood(Sprite):
         return f"{type(self).__name__}({self._rect})"
 
     def draw_onto(self, surface: pygame.Surface):
-        pygame.draw.rect(surface, self.color, self._rect)
-        pygame.draw.rect(surface, SNAKE_COLORS.border, self._rect, width=1)
+        pygame.draw.rect(surface, self.colors.fill, self._rect)
+        pygame.draw.rect(surface, self.colors.border, self._rect, width=1)
 
 
 class Snake(Sprite):
     color = "purple"
 
-    def __init__(self, head: SnakeRect, screen_size: Size) -> None:
+    def __init__(self, head: SnakeRect, screen_size: Size, colors: BlockColors) -> None:
         self._rects = [head]
         self._screen_size = screen_size
+        self._colors = colors
 
     def __len__(self) -> int:
         return len(self._rects)
@@ -90,7 +100,7 @@ class Snake(Sprite):
         new.update(new_head_coordinates.to_tuple(), self.head.size)
         self._rects.insert(0, new)
 
-    def collides_with_self(self):
+    def collides_with_self(self) -> bool:
         head = self.head
         return any(body_part.colliderect(head) for body_part in self.tail)
 
@@ -107,15 +117,7 @@ class Snake(Sprite):
         else:
             return False
 
-    def contains_top_left(self, top_left: Point) -> bool:
+    def draw_onto(self, surface: pygame.Surface) -> None:
         for rect in self.rects:
-            if Point(rect.x, rect.y) == top_left:
-                return True
-
-        else:
-            return False
-
-    def draw_onto(self, surface):
-        for rect in self.rects:
-            pygame.draw.rect(surface, self.color, rect)
-            pygame.draw.rect(surface, SNAKE_COLORS.border, rect, width=1)
+            pygame.draw.rect(surface, self._colors.fill, rect)
+            pygame.draw.rect(surface, self._colors.border, rect, width=1)
