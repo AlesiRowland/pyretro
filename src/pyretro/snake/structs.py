@@ -34,6 +34,9 @@ class Size:
     def __mul__(self, other):
         return type(self)(self.width * other.width, self.height * other.height)  # noqa
 
+    def __floordiv__(self, other):
+        return type(self)(self.width / other.width, self.height / other.height)  # noqa
+
     def to_tuple(self):
         return self.width, self.height
 

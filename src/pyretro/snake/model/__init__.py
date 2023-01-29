@@ -1,11 +1,10 @@
 from typing import TypeVar
 
 from .enums import Direction
-from .settings import SnakeSettings
-from .sprites.factories import SpriteFactory, SnakeCoordinateFactory
+from .sprites.factories import SnakeSpriteFactory, SnakeCoordinateFactory
 from .sprites.rect import SnakeRect
 from .sprites.types import Snake, SnakeFood, Sprite
-from .structs import Point, Size
+from pyretro.snake.structs import Point, Size
 
 T = TypeVar("T", bound="SnakeGameModel")
 
@@ -15,7 +14,7 @@ class SnakeGameModel:
         self.current_movement_direction = Direction.UP
         self._snake_settings = snake_settings
         self._coordinate_factory = SnakeCoordinateFactory(snake_settings)
-        self._sprite_factory = SpriteFactory(self._coordinate_factory)
+        self._sprite_factory = SnakeSpriteFactory(self._coordinate_factory)
 
         self._snake = self._sprite_factory.create_snake()
         self._snake_food: list[SnakeFood] = []
