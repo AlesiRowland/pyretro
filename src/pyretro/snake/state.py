@@ -9,8 +9,14 @@ from pygame.event import Event
 from .enums import Direction
 from .events import COLLIDE_EVENT, CYCLE_EVENT, InternalEvent, KeyEvent, WrappedEvent
 from .pubsub import (
-    DirectionChangeSetter, EventHandler, GameOverStateSetter,
-    GameStateSetter, MenuStateSetter, QuitSetter, SpriteUpdater, StateSubscriber,
+    DirectionChangeSetter,
+    EventHandler,
+    GameOverStateSetter,
+    GameStateSetter,
+    MenuStateSetter,
+    QuitSetter,
+    SpriteUpdater,
+    StateSubscriber,
 )
 from .sprites import Snake, SnakeFood, Sprite
 from .structs import GameSettings, Point, Size
@@ -40,12 +46,14 @@ class State(ABC):
         return cls.__name__
 
     @abstractmethod
-    def handle_event(self, event: Event) -> None: ...
+    def handle_event(self, event: Event) -> None:
+        ...
 
     @abstractmethod
-    def render_sprites(self, surface) -> None: ...
+    def render_sprites(self, surface) -> None:
+        ...
 
-    def change_state(self, new_state: 'State'):
+    def change_state(self, new_state: "State"):
         LOGGER.debug("Changing State: %s -> %s", self.name, new_state.name)
         self.owner_engine.state = new_state
 
@@ -64,7 +72,7 @@ class MenuState(State):
     def __init__(self, owner_engine: Engine, game_settings: GameSettings) -> None:
         super().__init__(owner_engine, game_settings)
         self._title = self._sprite_factory.create_menu_title()
-        subscriber_bindings: dict[WrappedEvent: list[StateSubscriber]] = {
+        subscriber_bindings: dict[WrappedEvent : list[StateSubscriber]] = {
             KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_m)): [MenuStateSetter(self)],
             KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_s)): [GameStateSetter(self)],
             KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_q)): [QuitSetter(self)],
@@ -86,24 +94,35 @@ class GameState(State):
     _food = NotImplemented
     _current_direction = NotImplemented
 
-    def __init__(self,  engine: Engine, game_settings: GameSettings) -> None:
+    def __init__(self, engine: Engine, game_settings: GameSettings) -> None:
         super().__init__(engine, game_settings)
-        subscriber_bindings: dict[WrappedEvent: list[StateSubscriber]] = {
-            KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_UP)): [DirectionChangeSetter(Direction.UP, self)],
-            KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_DOWN)): [DirectionChangeSetter(Direction.DOWN, self)],
-            KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_RIGHT)): [DirectionChangeSetter(Direction.RIGHT, self)],
-            KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_LEFT)): [DirectionChangeSetter(Direction.LEFT, self)],
+        subscriber_bindings: dict[WrappedEvent : list[StateSubscriber]] = {
+            KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_UP)): [
+                DirectionChangeSetter(Direction.UP, self)
+            ],
+            KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_DOWN)): [
+                DirectionChangeSetter(Direction.DOWN, self)
+            ],
+            KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_RIGHT)): [
+                DirectionChangeSetter(Direction.RIGHT, self)
+            ],
+            KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_LEFT)): [
+                DirectionChangeSetter(Direction.LEFT, self)
+            ],
             KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_m)): [MenuStateSetter(self)],
             KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_r)): [GameStateSetter(self)],
             KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_q)): [QuitSetter(self)],
             InternalEvent(Event(CYCLE_EVENT)): [SpriteUpdater(self)],
             InternalEvent(Event(COLLIDE_EVENT)): [GameOverStateSetter(self)],
-
         }
         self._event_handler = EventHandler(subscriber_bindings)
         self._snake = self._sprite_factory.create_snake(self.game_settings.snake_colors)
         location = self._coordinate_factory.new_snake_food_location()
-        self._snake_food = [self._sprite_factory.create_snake_food(location, self.game_settings.snake_food_colors)]
+        self._snake_food = [
+            self._sprite_factory.create_snake_food(
+                location, self.game_settings.snake_food_colors
+            )
+        ]
         self._current_direction = Direction.UP
         self._snake_moved = False
         pygame.event.set_allowed([pygame.KEYDOWN, CYCLE_EVENT])
@@ -196,26 +215,25 @@ class GameState(State):
             sprite.draw_onto(surface)
 
     def to_game_over_state(self):
-        game_over_state = GameOverState(self.owner_engine,
-                                        self.game_settings,
-                                        self.current_score
-                                        )
+        game_over_state = GameOverState(
+            self.owner_engine, self.game_settings, self.current_score
+        )
         self.change_state(game_over_state)
         LOGGER.debug("Changed state %s -> %s", self.name, game_over_state.name)
 
 
 class GameOverState(State):
     def __init__(
-            self,
-            owner_engine: Engine,
-            game_settings: GameSettings,
-            score: int,
+        self,
+        owner_engine: Engine,
+        game_settings: GameSettings,
+        score: int,
     ) -> None:
         super().__init__(owner_engine, game_settings)
         self._game_over_title = self._sprite_factory.create_game_over_title(score)
         pygame.event.set_allowed([pygame.KEYDOWN, CYCLE_EVENT])
         pygame.time.set_timer(pygame.event.Event(CYCLE_EVENT), 0)
-        subscriber_bindings: dict[WrappedEvent: list[StateSubscriber]] = {
+        subscriber_bindings: dict[WrappedEvent : list[StateSubscriber]] = {
             KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_m)): [MenuStateSetter(self)],
             KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_r)): [GameStateSetter(self)],
             KeyEvent(Event(pygame.KEYDOWN, key=pygame.K_q)): [QuitSetter(self)],

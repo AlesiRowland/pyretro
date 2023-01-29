@@ -6,7 +6,6 @@ from pyretro.snake.model import Size, SnakeRect
 
 @pytest.mark.unit
 class TestSnakeRect:
-
     @fixture
     def snake_rect(self):
         return SnakeRect(0, 0, 50, 50)

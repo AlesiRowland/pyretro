@@ -48,7 +48,6 @@ class TitleSprite(Sprite):
 
 
 class SnakeFood(Sprite):
-
     def __init__(self, snake_rect: SnakeRect, colors: BlockColors) -> None:
         self._rect = snake_rect
         self.colors = colors

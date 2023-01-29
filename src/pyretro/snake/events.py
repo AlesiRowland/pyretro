@@ -17,15 +17,24 @@ class WrappedEvent(Protocol):
     event: pygame.event.Event = NotImplemented
 
     @property
-    def type(self) -> int: ...
-    def __hash__(self) -> int: ...
-    def __eq__(self, other: Any) -> bool: ...
-    def __repr__(self) -> str: ...
-    def __str__(self) -> str: ...
+    def type(self) -> int:
+        ...
+
+    def __hash__(self) -> int:
+        ...
+
+    def __eq__(self, other: Any) -> bool:
+        ...
+
+    def __repr__(self) -> str:
+        ...
+
+    def __str__(self) -> str:
+        ...
 
 
 class EventWrapper:
-    __slots__ = "event",
+    __slots__ = ("event",)
 
     def __init__(self, event):
         self.event = event
@@ -44,7 +53,6 @@ class EventWrapper:
 
 
 class KeyEvent(EventWrapper, WrappedEvent):
-
     @property
     def key(self):
         return self.event.key
@@ -58,7 +66,6 @@ class KeyEvent(EventWrapper, WrappedEvent):
 
 
 class InternalEvent(EventWrapper, WrappedEvent):
-
     @property
     def type(self) -> int:
         return INTERNAL_EVENT
