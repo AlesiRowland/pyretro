@@ -35,7 +35,7 @@ class MenuStateSetter(StateSubscriber):
 
 class QuitSetter(StateSubscriber):
     def update(self):
-        self._state.owner_engine.active = False
+        self._state._owner_engine.active = False
 
 
 class GameOverStateSetter(GameStateSubscriber):

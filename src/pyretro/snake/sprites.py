@@ -25,12 +25,15 @@ class SnakeRect(pygame.Rect):
 
 
 class Sprite(abc.ABC):
-    color: str = NotImplemented
-
     def __eq__(self, other) -> bool:
         if not isinstance(other, type(self)):
             return NotImplemented
         return self.rects == other.rects
+
+    @property
+    @abc.abstractmethod
+    def rects(self):
+        ...
 
     @abc.abstractmethod
     def draw_onto(self, surface):
@@ -42,6 +45,10 @@ class TitleSprite(Sprite):
         font = pygame.font.SysFont("arialunicode", size, True, False)
         self._text = font.render(text, True, color)
         self._rect = self._text.get_rect(center=center.to_tuple())
+
+    @property
+    def rects(self):
+        return [self._rect]
 
     def draw_onto(self, surface):
         surface.blit(self._text, self._rect)
@@ -65,8 +72,6 @@ class SnakeFood(Sprite):
 
 
 class Snake(Sprite):
-    color = "purple"
-
     def __init__(self, head: SnakeRect, screen_size: Size, colors: BlockColors) -> None:
         self._rects = [head]
         self._screen_size = screen_size

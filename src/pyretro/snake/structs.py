@@ -52,6 +52,7 @@ class GameSettings:
 
     unit_size: Size
     grid_size: Size
+    speed: int
     snake_colors: BlockColors
     snake_food_colors: BlockColors
     game_background_color: str

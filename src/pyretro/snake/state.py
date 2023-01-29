@@ -35,8 +35,8 @@ class Engine(Protocol):
 class State(ABC):
     def __init__(self, owner_engine: Engine, game_settings: GameSettings) -> None:
         pygame.event.set_blocked(None)
-        self.owner_engine = owner_engine
-        self.game_settings = game_settings
+        self._owner_engine = owner_engine
+        self._game_settings = game_settings
         unit_size, grid_size = game_settings.unit_size, game_settings.grid_size
         self._coordinate_factory = SnakeCoordinateFactory(unit_size, grid_size)
         self._sprite_factory = SnakeSpriteFactory(self._coordinate_factory)
@@ -55,15 +55,15 @@ class State(ABC):
 
     def change_state(self, new_state: "State"):
         LOGGER.debug("Changing State: %s -> %s", self.name, new_state.name)
-        self.owner_engine.state = new_state
+        self._owner_engine.state = new_state
 
     def to_game_state(self):
-        game_state = GameState(self.owner_engine, self.game_settings)
+        game_state = GameState(self._owner_engine, self._game_settings)
         self.change_state(game_state)
         LOGGER.debug("Changed state %s -> %s", self.name, game_state.name)
 
     def to_menu_state(self):
-        menu_state = MenuState(self.owner_engine, self.game_settings)
+        menu_state = MenuState(self._owner_engine, self._game_settings)
         self.change_state(menu_state)
         LOGGER.debug("Changed state %s -> %s", self.name, menu_state.name)
 
@@ -84,7 +84,7 @@ class MenuState(State):
         self._event_handler.handle_event(event)
 
     def render_sprites(self, surface: pygame.Surface) -> None:
-        surface.fill(self.game_settings.menu_background_color)
+        surface.fill(self._game_settings.menu_background_color)
         self._title.draw_onto(surface)
 
 
@@ -116,17 +116,17 @@ class GameState(State):
             InternalEvent(Event(COLLIDE_EVENT)): [GameOverStateSetter(self)],
         }
         self._event_handler = EventHandler(subscriber_bindings)
-        self._snake = self._sprite_factory.create_snake(self.game_settings.snake_colors)
+        self._snake = self._sprite_factory.create_snake(self._game_settings.snake_colors)
         location = self._coordinate_factory.new_snake_food_location()
         self._snake_food = [
             self._sprite_factory.create_snake_food(
-                location, self.game_settings.snake_food_colors
+                location, self._game_settings.snake_food_colors
             )
         ]
         self._current_direction = Direction.UP
         self._snake_moved = False
         pygame.event.set_allowed([pygame.KEYDOWN, CYCLE_EVENT])
-        pygame.time.set_timer(pygame.event.Event(CYCLE_EVENT), 300)
+        pygame.time.set_timer(pygame.event.Event(CYCLE_EVENT), self._game_settings.speed)
 
     @property
     def current_score(self):
@@ -198,7 +198,7 @@ class GameState(State):
 
         found_snake_food = self.pop_found_snake_food()
         coordinates = self.get_movement_coordinates()
-        auto_grow_until = self.game_settings.auto_grow_until
+        auto_grow_until = self._game_settings.auto_grow_until
         if found_snake_food or len(self.snake) < auto_grow_until:
             self.snake.grow(coordinates)
         else:
@@ -210,13 +210,13 @@ class GameState(State):
         self._snake_moved = False
 
     def render_sprites(self, surface: pygame.Surface) -> None:
-        surface.fill(self.game_settings.game_background_color)
+        surface.fill(self._game_settings.game_background_color)
         for sprite in self.sprites:
             sprite.draw_onto(surface)
 
     def to_game_over_state(self):
         game_over_state = GameOverState(
-            self.owner_engine, self.game_settings, self.current_score
+            self._owner_engine, self._game_settings, self.current_score
         )
         self.change_state(game_over_state)
         LOGGER.debug("Changed state %s -> %s", self.name, game_over_state.name)
