@@ -125,7 +125,7 @@ class GameState(State):
         ]
         self._current_direction = Direction.UP
         self._snake_moved = False
-        pygame.event.set_allowed([pygame.KEYDOWN, CYCLE_EVENT])
+        pygame.event.set_allowed([pygame.KEYDOWN, CYCLE_EVENT, COLLIDE_EVENT])
         pygame.time.set_timer(pygame.event.Event(CYCLE_EVENT), self._game_settings.speed)
 
     @property
@@ -171,7 +171,7 @@ class GameState(State):
 
     def add_snake_food(self: T) -> T:
         top_left_point = self._coordinate_factory.new_snake_food_location()
-        colors = self.game_settings.snake_food_colors
+        colors = self._game_settings.snake_food_colors
         snake_food = self._sprite_factory.create_snake_food(top_left_point, colors)
         while self._snake.collides_with_sprite(snake_food):
             top_left_point = self._coordinate_factory.new_snake_food_location()

@@ -9,7 +9,6 @@ COLLIDE_EVENT = pygame.event.custom_type()  # Indicates the snake collided.
 
 LOGGER = logging.getLogger(__name__)
 
-INTERNAL_EVENT = pygame.event.custom_type()
 T = TypeVar("T", bound="WrappedEvent")
 
 
@@ -40,6 +39,10 @@ class EventWrapper:
         self.event = event
         LOGGER.debug("Wrapped event: %s -> %s", event, self)
 
+    @property
+    def type(self) -> int:
+        return self.event.type
+
     def __eq__(self, other: Any) -> bool:
         if isinstance(other, type(self)):
             return self.__dict__ == other.__dict__
@@ -57,18 +60,11 @@ class KeyEvent(EventWrapper, WrappedEvent):
     def key(self):
         return self.event.key
 
-    @property
-    def type(self) -> int:
-        return self.event.type
-
     def __hash__(self) -> int:
         return hash((self.event.type, self.event.key))
 
 
 class InternalEvent(EventWrapper, WrappedEvent):
-    @property
-    def type(self) -> int:
-        return INTERNAL_EVENT
 
     def __hash__(self) -> int:
         return hash(self.event.type)
